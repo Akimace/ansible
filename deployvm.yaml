@@ -1,22 +1,13 @@
 - hosts: all # see hosts.yaml file
   remote_user: root
-
-  roles:
-    - role: install proxmox_vms
+  tasks:
+    - name: deploy new vm
       proxmox:
-        api_user: root
-        api_password: itescia
-        api_host: 192.168.208.100 
-      vms:
-        Linux server:
-          node: <node_name>
-          ubuntu_distribution: <debian-10.2.0>
-          locale: en_FR
-          root_password:  <itescia>
-          memory_size: <1024>
-          virtio: '{"virtio0":"local-lvm:<10>,cache=writeback,discard=on"}'
-          network:
-            ip: <192.168.208.201>
-            netmask: <255.255.255.0>
-            gateway: <192.168.208.2>
-            domainname: <ramzilab>
+	node: 'uk-mc02'
+	api_user: root
+	api_password: itescia
+	api_host: px1
+	password: itescia
+	hostname: px1
+	ostemplate: 'local:vztmpl/debian-10.2.0-amd64-netinst.iso.tar.gz'
+        
