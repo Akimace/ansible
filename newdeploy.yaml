@@ -13,6 +13,11 @@
       - "python-dev"
       - "build-essential"
       - "python-proxmoxer"
+
+    ports:
+      - "22"
+      - "8006"
+
   tasks:
    - name: Installation packages 
      package: 
@@ -28,3 +33,30 @@
         uid: 1041
         group: root 
         password: '$6$mysecretsalt$TK1JRwYBuDh29pZVgcQNHWAFZa7bKBqtz8RIPP/PjaLezkXZSSvPHuTVC/TF6RQQAw3mTb3yfx2TUFFotMhlr/'
+
+   - name: autoriser port 22 et 8006
+     iptables:
+      chain: INPUT
+      destination_port:  "{{ item }}"
+      jump: ACCEPT
+      protocol: tcp
+     become: yes
+     loop: "{{ ports }}"
+     tags: iptables1
+
+   - name: autoriser tout entre proxmox
+     iptables:
+      chain: INPUT 
+      dst_range: 192.168.208.100-192.168.208.200
+      jump: ACCEPT
+      protocol: tcp
+     become: yes
+     tags: iptables2
+
+   - name: bloquer le reste
+     iptables:
+      chain: INPUT
+      jump: DROP
+      protocol: tcp
+     become: yes
+     tags: iptables3
