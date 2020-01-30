@@ -1,0 +1,30 @@
+- hosts: hyperviseur
+  remote_user: root
+  vars:
+    hostapi: "192.168.208.100"
+    hyperviseur:
+     192.168.208.100:
+     192.168.208.150:
+     192.168.208.200:
+    user: "root@pam"
+    passwd: "itescia"
+    package:
+      - "python-pip"
+      - "python-dev"
+      - "build-essential"
+      - "python-proxmoxer"
+  tasks:
+   - name: Installation packages 
+     package: 
+       name: "{{ item }}" 
+       state: latest 
+     loop: "{{ package }}"
+     tags: package 
+ 
+   - name: Add the user 'itesciadmin' with a specific uid and a primary group of 'admin' 
+     user:
+        name: itesciadmin 
+        comment: lala
+        uid: 1041
+        group: root 
+        password: '$6$mysecretsalt$TK1JRwYBuDh29pZVgcQNHWAFZa7bKBqtz8RIPP/PjaLezkXZSSvPHuTVC/TF6RQQAw3mTb3yfx2TUFFotMhlr/'
