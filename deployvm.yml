@@ -1,0 +1,16 @@
+# premier déploiement vm
+- name: Installation du serveur
+  hosts: all
+  tasks:
+#    - name: install proxmox
+#      package:
+#        name: python-proxmoxer
+#        state: present
+    - name: Installation de vm
+      proxmox_kvm:
+       api_user    : root@pam
+       api_password: itescia
+       api_host    : 192.168.56.129
+       name        : newmv
+       node        : pve
+
